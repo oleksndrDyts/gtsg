@@ -1,16 +1,15 @@
-export const App = () => {
+import { Routes, Route } from 'react-router-dom';
+
+import StartPage from 'pages/StartPage';
+import GamePage from 'pages/GamePage';
+
+const App = () => {
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+    <Routes>
+      <Route path="/" element={<StartPage />} />
+      <Route path="/game" element={<GamePage />} />
+    </Routes>
   );
 };
+
+export default App;

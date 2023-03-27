@@ -1,0 +1,19 @@
+.link {
+  color: white;
+  text-decoration: none;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 8px 20px 10px;
+  background-color: inherit;
+
+  /* transition-property: background-color;
+  transition-duration: 250ms;
+  transition-timing-function: linear;
+  transition-delay: 0; */
+
+  transition: background-color 250ms linear;
+}
+
+.link:hover {
+  background-color: green;
+}
