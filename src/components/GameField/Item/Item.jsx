@@ -98,6 +98,7 @@ const Item = ({
             }
             play();
           }}
+          style={{ pointerEvents: isItemOpen ? 'none' : 'auto' }}
           className={`${css.innerContainer} ${
             isItemOpen ? css.opened : css.notopened
           }`}
