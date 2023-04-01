@@ -1,37 +1,40 @@
 import { useState } from 'react';
+import useSound from 'use-sound';
 
 import PageContainer from 'components/PageContainer/';
 import PlayerInfo from 'components/PlayerInfo';
-import GameField from 'components/GameField';
+import PlayingProcess from 'components/PlayingProcess';
+
+import sk from '../music/sk.mp3';
 
 const song = {
   artist: 'Скрябін',
   text: ['Спи', 'собі', 'сама', 'коли', 'біля', 'тебе'],
+  track: 'Спи собі сама',
 };
 
 const GamePage = () => {
   const [player1, setPlayer1] = useState({
     name: 'Sasha',
     score: 0,
+    isPlayerPlayingNow: true,
   });
   const [player2, setPlayer2] = useState({
     name: 'Nadya',
     score: 0,
+    isPlayerPlayingNow: false,
   });
-
-  const [gameOngoingInfo, setGameOngoingInfo] = useState({
-    player1PlayingNow: true,
-    gameProcess: 'pending',
-  });
+  const [play, { stop }] = useSound(sk);
 
   return (
     <PageContainer>
-      <PlayerInfo
-        player={gameOngoingInfo.player1PlayingNow ? player1 : player2}
-      />
-      <GameField
+      <PlayerInfo players={[player1, player2]} />
+      <PlayingProcess
         song={song}
-        player={gameOngoingInfo.player1PlayingNow ? player1 : player2}
+        player1={{ info: player1, setInfo: setPlayer1 }}
+        player2={{ info: player2, setInfo: setPlayer2 }}
+        play={play}
+        stop={stop}
       />
     </PageContainer>
   );

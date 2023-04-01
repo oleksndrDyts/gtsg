@@ -1,11 +1,18 @@
 .container {
   display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: space-around;
+  /* gap: 10px; */
+
+  width: 100%;
+  /* outline: 1px solid red; */
+}
+
+.item {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-
-  /* width: 200px; */
-  /* outline: 1px solid red; */
 }
 
 .player {
@@ -15,4 +22,14 @@
 
 .points {
   color: yellow;
+}
+
+.item.notActive {
+  color: gray;
+}
+.item.notActive .points {
+  color: gray;
+}
+.item.notActive .player {
+  color: gray;
 }

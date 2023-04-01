@@ -1,7 +1,15 @@
 import { useState, useRef } from 'react';
 import css from './Item.module.css';
 
-const Item = ({ songText, setText, idx, decreaseScore, isRightResult }) => {
+const Item = ({
+  songText,
+  setText,
+  idx,
+  decreaseScore,
+  isRightResult,
+  play,
+  score,
+}) => {
   const [isItemOpen, setOpenItem] = useState(false);
   const [isUserAddWord, setUserAddWord] = useState(false);
   const inputRef = useRef(null);
@@ -82,7 +90,14 @@ const Item = ({ songText, setText, idx, decreaseScore, isRightResult }) => {
         </>
       ) : (
         <div
-          onClick={handleSetItemOpen}
+          onClick={() => {
+            handleSetItemOpen();
+
+            if (score !== 1) {
+              return;
+            }
+            play();
+          }}
           className={`${css.innerContainer} ${
             isItemOpen ? css.opened : css.notopened
           }`}

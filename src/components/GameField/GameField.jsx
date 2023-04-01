@@ -1,11 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Item from './Item';
 import css from './GameField.module.css';
 
-const GameField = ({ song, player }) => {
+const wonOrNo = items => {
+  for (const item of items) {
+    if (item !== true) {
+      return false;
+    }
+  }
+  // setPlayerScore();
+  return true;
+  // setPlayerScore();
+};
+
+const GameField = ({
+  song,
+  score,
+  decreaseScore,
+  setPlayerScore,
+  setGameProcess,
+  play,
+}) => {
   const [playerSongText, setPlayerSongText] = useState([]);
-  const [currentScore, setCurrentScore] = useState(6);
   const [comparedResult, setComparedResult] = useState([
     'notCompared',
     'notCompared',
@@ -14,6 +31,8 @@ const GameField = ({ song, player }) => {
     'notCompared',
     'notCompared',
   ]);
+  const [isPlayerWon, setPlayerWon] = useState(false);
+  const [isResultCompared, setResultCompared] = useState(false);
 
   const shouldCompare =
     playerSongText.length !== 6 ||
@@ -28,10 +47,6 @@ const GameField = ({ song, player }) => {
     });
   };
 
-  const decreaseScore = () => {
-    setCurrentScore(prevState => prevState - 1);
-  };
-
   const compareResult = () => {
     if (shouldCompare) {
       return;
@@ -41,43 +56,64 @@ const GameField = ({ song, player }) => {
       return el.toLowerCase() === playerSongText[idx].toLowerCase();
     });
     setComparedResult(result);
+    setResultCompared(true);
   };
 
-  const getIsPlayerWon = () => {
-    for (const item of comparedResult) {
-      if (item !== true) {
-        return false;
-      }
+  const goNextGameStage = () => {
+    setGameProcess(`endRound${isPlayerWon ? 'Won' : 'Lost'}`);
+  };
+
+  useEffect(() => {
+    if (wonOrNo(comparedResult)) {
+      setPlayerWon(true);
+      setPlayerScore();
     }
-    return true;
-  };
 
-  console.log(getIsPlayerWon());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [comparedResult]);
 
   return (
     <>
       <div className={css.container}>
         {song.text.map((text, idx) => (
           <Item
+            key={idx}
             songText={text}
             idx={idx}
             setText={handleSetSongText}
             decreaseScore={decreaseScore}
             isRightResult={comparedResult[idx]}
+            play={play}
+            score={score}
           />
         ))}
       </div>
-      {getIsPlayerWon() && (
-        <p style={{ marginTop: '20px' }}>Отримано балів: {currentScore}</p>
+      {isPlayerWon && (
+        <p style={{ marginTop: '20px' }}>Отримано балів: {score}</p>
       )}
 
-      <button
-        style={{ marginTop: '100px' }}
-        onClick={compareResult}
-        disabled={shouldCompare ? true : false}
-      >
-        Compare
-      </button>
+      {!isResultCompared ? (
+        <button
+          className={css.btn}
+          onClick={() => {
+            compareResult();
+            play();
+          }}
+          disabled={shouldCompare ? true : false}
+          type="button"
+        >
+          Зрівняти результат
+        </button>
+      ) : (
+        <button
+          className={`${css.btn} ${isPlayerWon ? css.won : css.lose}`}
+          onClick={goNextGameStage}
+          disabled={shouldCompare ? true : false}
+          type="button"
+        >
+          Далі
+        </button>
+      )}
     </>
   );
 };
