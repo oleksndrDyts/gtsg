@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useSound from 'use-sound';
 
 import PageContainer from 'components/PageContainer/';
 import PlayerInfo from 'components/PlayerInfo';
 import PlayingProcess from 'components/PlayingProcess';
 
-import sk from '../music/sk.mp3';
+// import sk from '../music/sk.mp3';
 
 // import { songs } from 'songs';
 
