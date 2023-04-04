@@ -57,7 +57,8 @@ const Item = ({
     <div
       className={css.container}
       style={{
-        pointerEvents: isRightResult !== 'notCompared' ? 'none' : 'auto',
+        pointerEvents:
+          isRightResult !== 'notCompared' || isItemOpen ? 'none' : 'auto',
       }}
     >
       {isRightResult === false && (
@@ -98,7 +99,7 @@ const Item = ({
             }
             play();
           }}
-          style={{ pointerEvents: isItemOpen ? 'none' : 'auto' }}
+          // style={{ pointerEvents: isItemOpen ? 'none' : 'auto' }}
           className={`${css.innerContainer} ${
             isItemOpen ? css.opened : css.notopened
           }`}

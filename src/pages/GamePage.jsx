@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSound from 'use-sound';
 
 import PageContainer from 'components/PageContainer/';
@@ -7,13 +7,16 @@ import PlayingProcess from 'components/PlayingProcess';
 
 import sk from '../music/sk.mp3';
 
-const song = {
-  artist: 'Скрябін',
-  text: ['Спи', 'собі', 'сама', 'коли', 'біля', 'тебе'],
-  track: 'Спи собі сама',
-};
+// import { songs } from 'songs';
 
-const GamePage = () => {
+// const song = {
+//   artist: 'Скрябін',
+//   text: ['Спи', 'собі', 'сама', 'коли', 'біля', 'тебе'],
+//   track: 'Спи собі сама',
+//   url: '../music/sk.mp3',
+// };
+
+const GamePage = ({ song }) => {
   const [player1, setPlayer1] = useState({
     name: 'Sasha',
     score: 0,
@@ -24,7 +27,8 @@ const GamePage = () => {
     score: 0,
     isPlayerPlayingNow: false,
   });
-  const [play, { stop }] = useSound(sk);
+
+  const [play, { stop }] = useSound(song.url);
 
   return (
     <PageContainer>
