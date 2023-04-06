@@ -2,7 +2,7 @@
 
 import css from './RoundInfo.module.css';
 
-const Text = ({ nextRound, children, song, stop }) => {
+const Text = ({ nextRound, children, song }) => {
   return (
     <div className={css.container}>
       {children}
@@ -13,7 +13,6 @@ const Text = ({ nextRound, children, song, stop }) => {
         type="button"
         onClick={() => {
           nextRound();
-          stop();
         }}
       >
         Далі
@@ -22,7 +21,7 @@ const Text = ({ nextRound, children, song, stop }) => {
   );
 };
 
-const RoundInfo = ({ info, nextRound, score, stop, song }) => {
+const RoundInfo = ({ info, nextRound, score, song }) => {
   //   const isFirstRender = useRef(true);
   //   useEffect(() => {
   //     if (isFirstRender.current) {
@@ -37,20 +36,20 @@ const RoundInfo = ({ info, nextRound, score, stop, song }) => {
   switch (info) {
     case 'endRoundWon':
       return (
-        <Text nextRound={nextRound} song={song} stop={stop}>
+        <Text nextRound={nextRound} song={song}>
           <p>Вітаємо, ви виграли раунд!</p>
           <p>Зароблені бали: {score}</p>
         </Text>
       );
     case 'endRoundLost':
       return (
-        <Text nextRound={nextRound} song={song} stop={stop}>
+        <Text nextRound={nextRound} song={song}>
           На жаль, ви програли раунд
         </Text>
       );
     case 'endRoundNull':
       return (
-        <Text nextRound={nextRound} song={song} stop={stop}>
+        <Text nextRound={nextRound} song={song}>
           Ви відкрили всі слова, вітаємо з нулем!
         </Text>
       );

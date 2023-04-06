@@ -17,3 +17,8 @@
 .link:hover {
   background-color: green;
 }
+
+.link.disabled {
+  pointer-events: none;
+  background-color: gray;
+}

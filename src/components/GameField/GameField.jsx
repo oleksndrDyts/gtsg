@@ -20,7 +20,6 @@ const GameField = ({
   decreaseScore,
   setPlayerScore,
   setGameProcess,
-  play,
 }) => {
   const [playerSongText, setPlayerSongText] = useState([]);
   const [comparedResult, setComparedResult] = useState([
@@ -83,7 +82,6 @@ const GameField = ({
             setText={handleSetSongText}
             decreaseScore={decreaseScore}
             isRightResult={comparedResult[idx]}
-            play={play}
             score={score}
           />
         ))}
@@ -97,7 +95,6 @@ const GameField = ({
           className={css.btn}
           onClick={() => {
             compareResult();
-            play();
           }}
           disabled={shouldCompare ? true : false}
           type="button"

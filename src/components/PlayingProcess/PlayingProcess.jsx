@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import GameField from 'components/GameField';
 import RoundInfo from 'components/RoundInfo';
 
-const PlayingProcess = ({ song, player1, player2, play, stop }) => {
+const PlayingProcess = ({ song, player1, player2 }) => {
   const [gameProcess, setGameProcess] = useState('playingNow');
 
   const changePlayingPlayer = () => {
@@ -57,7 +57,7 @@ const PlayingProcess = ({ song, player1, player2, play, stop }) => {
           setPlayerScore={setPlayerScore}
           setGameProcess={setGameProcess}
           changePlayingPlayer={changePlayingPlayer}
-          play={play}
+          // play={play}
         />
       );
 
@@ -70,7 +70,7 @@ const PlayingProcess = ({ song, player1, player2, play, stop }) => {
           info={gameProcess}
           nextRound={nextRound}
           score={currentScore}
-          stop={stop}
+          // stop={stop}
         />
       );
 

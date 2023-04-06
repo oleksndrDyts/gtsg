@@ -1,8 +1,7 @@
 import useSound from 'use-sound';
 
 export const useSsound = url => {
-  console.log(url);
-  const [play, { stop }] = useSound(url);
+  const [play, { stop }] = useSound(url.url);
 
   return { play, stop };
 };

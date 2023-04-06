@@ -7,7 +7,6 @@ const Item = ({
   idx,
   decreaseScore,
   isRightResult,
-  play,
   score,
 }) => {
   const [isItemOpen, setOpenItem] = useState(false);
@@ -97,7 +96,6 @@ const Item = ({
             if (score !== 1) {
               return;
             }
-            play();
           }}
           // style={{ pointerEvents: isItemOpen ? 'none' : 'auto' }}
           className={`${css.innerContainer} ${
