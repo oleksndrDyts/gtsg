@@ -3,7 +3,13 @@ import { useState, useEffect } from 'react';
 import GameField from 'components/GameField';
 import RoundInfo from 'components/RoundInfo';
 
-const PlayingProcess = ({ song, player1, player2 }) => {
+const PlayingProcess = ({
+  song,
+  player1,
+  player2,
+  typeOfConnection,
+  webSocket,
+}) => {
   const [gameProcess, setGameProcess] = useState('playingNow');
 
   const changePlayingPlayer = () => {
@@ -57,6 +63,9 @@ const PlayingProcess = ({ song, player1, player2 }) => {
           setPlayerScore={setPlayerScore}
           setGameProcess={setGameProcess}
           changePlayingPlayer={changePlayingPlayer}
+          typeOfConnection={typeOfConnection}
+          webSocket={webSocket}
+          player1={player1}
           // play={play}
         />
       );

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
 import Item from './Item';
@@ -20,6 +21,9 @@ const GameField = ({
   decreaseScore,
   setPlayerScore,
   setGameProcess,
+  typeOfConnection,
+  webSocket,
+  player1,
 }) => {
   const [playerSongText, setPlayerSongText] = useState([]);
   const [comparedResult, setComparedResult] = useState([
@@ -71,6 +75,110 @@ const GameField = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comparedResult]);
 
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      webSocket.emit('set-playerSongText', {
+        playerSongText,
+      });
+    }
+  }, [playerSongText, player1.isPlayerPlayingNow, typeOfConnection]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      webSocket.emit('set-comparedResult', {
+        comparedResult,
+      });
+    }
+  }, [comparedResult, player1.isPlayerPlayingNow, typeOfConnection]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      webSocket.emit('set-isPlayerWon', {
+        isPlayerWon,
+        typeOfConnection,
+      });
+    }
+  }, [isPlayerWon, player1.isPlayerPlayingNow, typeOfConnection]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      webSocket.emit('set-isResultCompared', {
+        isResultCompared,
+        typeOfConnection,
+      });
+    }
+  }, [isResultCompared, player1.isPlayerPlayingNow]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-playerSongText', data => {
+        setPlayerSongText(data);
+      });
+    }
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-comparedResult', data => {
+        setComparedResult(data);
+      });
+    }
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-isPlayerWon', data => {
+        setPlayerWon(data);
+      });
+    }
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-isResultCompared', data => {
+        setResultCompared(data);
+      });
+    }
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
   return (
     <>
       <div className={css.container}>
@@ -83,6 +191,8 @@ const GameField = ({
             decreaseScore={decreaseScore}
             isRightResult={comparedResult[idx]}
             score={score}
+            webSocket={webSocket}
+            player1={player1}
           />
         ))}
       </div>

@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useRef, useEffect } from 'react';
 import css from './Item.module.css';
 
 const Item = ({
@@ -8,6 +9,8 @@ const Item = ({
   decreaseScore,
   isRightResult,
   score,
+  webSocket,
+  player1,
 }) => {
   const [isItemOpen, setOpenItem] = useState(false);
   const [isUserAddWord, setUserAddWord] = useState(false);
@@ -51,6 +54,65 @@ const Item = ({
     : `${css.anotherInnerContainer} ${css.active}`;
 
   const itemText = isItemOpen ? songText : 'Відкрити слово';
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      webSocket.emit('set-isItemOpen', {
+        idx,
+        isItemOpen,
+      });
+    }
+  }, [isItemOpen, player1.isPlayerPlayingNow]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      console.log('send');
+      webSocket.emit('set-isUserAddWord', {
+        idx,
+        isUserAddWord,
+      });
+    }
+  }, [isUserAddWord, player1.isPlayerPlayingNow]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-isItemOpen', data => {
+        if (data.idx === idx) {
+          setOpenItem(true);
+        }
+      });
+    }
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-isUserAddWord', data => {
+        if (data.idx === idx) {
+          setUserAddWord(data.isUserAddWord);
+        }
+      });
+    }
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
 
   return (
     <div

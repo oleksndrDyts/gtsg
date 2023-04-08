@@ -7,8 +7,10 @@ import GamePage from 'pages/GamePage';
 import { useSetPlayersNames } from 'hooks/useSetPlayersNames';
 
 const App = () => {
+  const [webSocket, setWebSocket] = useState(null);
   const [gameType, setGameType] = useState('inOneDevice');
   const { players, setPlayers, shouldStart } = useSetPlayersNames();
+  const [typeOfConnection, setTypeOfConnection] = useState(null);
 
   return (
     <Routes>
@@ -20,10 +22,26 @@ const App = () => {
             shouldStart={shouldStart}
             gameType={gameType}
             setGameType={setGameType}
+            multiInfo={{
+              setWebSocket,
+              webSocket,
+              playerName: players.firstPlayer,
+            }}
+            typeOfConnection={typeOfConnection}
+            setTypeOfConnection={setTypeOfConnection}
           />
         }
       />
-      <Route path="/game" element={<GamePage players={players} />} />
+      <Route
+        path="/game"
+        element={
+          <GamePage
+            players={players}
+            webSocket={webSocket}
+            typeOfConnection={typeOfConnection}
+          />
+        }
+      />
     </Routes>
   );
 };
