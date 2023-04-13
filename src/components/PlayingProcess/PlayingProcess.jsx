@@ -54,7 +54,7 @@ const PlayingProcess = ({
     }
 
     webSocket.emit('set-changePlayer', {
-      data: 'll',
+      isPlaying: player1.info.isPlayerPlayingNow,
     });
   };
 
@@ -75,9 +75,7 @@ const PlayingProcess = ({
     }
 
     webSocket.on('get-changeScore', data => {
-      console.log(data);
       setCurrentScore(data.currentScore);
-      // decreaseScore();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -88,7 +86,6 @@ const PlayingProcess = ({
     }
 
     webSocket.on('get-changePlayer', data => {
-      console.log(data);
       changePlayingPlayer();
       player1.setInfo(prevState => {
         const newState = { ...prevState };
@@ -102,7 +99,7 @@ const PlayingProcess = ({
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [webSocket]);
+  }, []);
 
   useEffect(() => {
     if (currentScore === 0) {
@@ -117,6 +114,7 @@ const PlayingProcess = ({
 
     webSocket.emit('set-gameProcess', {
       gameProcess,
+      isPlaying: player1.info.isPlayerPlayingNow,
     });
   }, [gameProcess, player1.info.isPlayerPlayingNow, webSocket]);
   useEffect(() => {
