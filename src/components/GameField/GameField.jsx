@@ -80,105 +80,72 @@ const GameField = ({
     if (webSocket === null) {
       return;
     }
-
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-playerSongText', {
-        playerSongText,
-      });
-    }
+    webSocket.emit('set-playerSongText', {
+      playerSongText,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [playerSongText, typeOfConnection]);
-
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-comparedResult', {
-        comparedResult,
-      });
-    }
+    webSocket.emit('set-comparedResult', {
+      comparedResult,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [comparedResult, typeOfConnection]);
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
 
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-isPlayerWon', {
-        isPlayerWon,
-        typeOfConnection,
-      });
-    }
+    webSocket.emit('set-isPlayerWon', {
+      isPlayerWon,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [isPlayerWon, typeOfConnection]);
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
 
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-isResultCompared', {
-        isResultCompared,
-        typeOfConnection,
-      });
-    }
+    webSocket.emit('set-isResultCompared', {
+      isResultCompared,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [isResultCompared]);
 
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-playerSongText', data => {
-        setPlayerSongText(data);
-      });
-    }
+    webSocket.on('get-playerSongText', data => {
+      setPlayerSongText(data);
+    });
   }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-comparedResult', data => {
-        setComparedResult(data);
-      });
-    }
+    webSocket.on('get-comparedResult', data => {
+      setComparedResult(data);
+    });
   }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-isPlayerWon', data => {
-        setPlayerWon(data);
-      });
-    }
+    webSocket.on('get-isPlayerWon', data => {
+      setPlayerWon(data);
+    });
   }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-isResultCompared', data => {
-        setResultCompared(data);
-      });
-    }
+    webSocket.on('get-isResultCompared', data => {
+      setResultCompared(data);
+    });
   }, [webSocket]);
   return (
     <>

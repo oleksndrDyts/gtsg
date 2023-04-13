@@ -52,16 +52,10 @@ const PlayingProcess = ({
     if (webSocket === null) {
       return;
     }
-    // console.log('next');
-    // console.log(player2.info.isPlayerPlayingNow);
+
     webSocket.emit('set-changePlayer', {
       data: 'll',
     });
-
-    // setIsPlayerPlaying(prevState => {
-    //   // console.log(prevState);
-    //   return !prevState;
-    // });
   };
 
   useEffect(() => {
@@ -70,6 +64,7 @@ const PlayingProcess = ({
     }
     webSocket.emit('set-changeScore', {
       currentScore,
+      player: player1.info.isPlayerPlayingNow,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentScore]);
@@ -80,6 +75,7 @@ const PlayingProcess = ({
     }
 
     webSocket.on('get-changeScore', data => {
+      console.log(data);
       setCurrentScore(data.currentScore);
       // decreaseScore();
     });

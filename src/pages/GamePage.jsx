@@ -16,40 +16,14 @@ const GamePage = ({ players, webSocket, typeOfConnection }) => {
   const [player1, setPlayer1] = useState({
     name: players.firstPlayer,
     score: 0,
-    isPlayerPlayingNow: true,
+    isPlayerPlayingNow: typeOfConnection === 'connect' ? false : true,
   });
   const [player2, setPlayer2] = useState({
     name: players.secondPlayer,
     score: 0,
-    isPlayerPlayingNow: false,
+    isPlayerPlayingNow: typeOfConnection === 'create' ? true : false,
   });
   const { song } = useSong(songs, player1.isPlayerPlayingNow);
-  // console.log(player1.isPlayerPlayingNow);
-  // useEffect(() => {
-  //   if (webSocket === null) {
-  //     return;
-  //   }
-
-  //   webSocket.on('get-changePlayer', data => {
-  //     // console.log(player1.isPlayerPlayingNow);
-  //     // player1.setInfo(prevState => {
-  //     //   const newState = { ...prevState };
-  //     //   newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
-  //     //   return newState;
-  //     // });
-  //     // player2.setInfo(prevState => {
-  //     //   console.log(prevState);
-  //     //   const newState = { ...prevState };
-  //     //   newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
-  //     //   return newState;
-  //     // });
-  //     // changePlayingPlayer();
-  //     // console.log(player1.info);
-  //   });
-  // }, [webSocket]);
-
-  // console.log(player1);
-  // console.log(player2);
 
   useEffect(() => {
     if (player1.name === '' && player2.name === '') {

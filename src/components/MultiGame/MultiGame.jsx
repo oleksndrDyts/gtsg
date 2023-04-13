@@ -42,9 +42,10 @@ const MultiGame = ({
 
   useEffect(() => {
     if (isFirstRender.current) {
-      const newSocket = io.connect(
-        'https://gtsg-io-production.up.railway.app/'
-      );
+      // const newSocket = io.connect(
+      //   'https://gtsg-io-production.up.railway.app/'
+      // );
+      const newSocket = io.connect('http://localhost:5000');
       multiInfo.setWebSocket(newSocket);
     }
     isFirstRender.current = false;

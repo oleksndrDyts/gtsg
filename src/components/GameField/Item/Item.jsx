@@ -66,88 +66,68 @@ const Item = ({
       return;
     }
 
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-itemText', {
-        inputValue,
-        idx,
-      });
-    }
+    webSocket.emit('set-itemText', {
+      inputValue,
+      idx,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [inputValue]);
 
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-itemText', data => {
-        if (idx === data.idx) {
-          setInputValue(data.inputValue);
-        }
-      });
-    }
+
+    webSocket.on('get-itemText', data => {
+      if (idx === data.idx) {
+        setInputValue(data.inputValue);
+      }
+    });
   }, [webSocket]);
 
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-isItemOpen', {
-        idx,
-        isItemOpen,
-      });
-    }
+    webSocket.emit('set-isItemOpen', {
+      idx,
+      isItemOpen,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [isItemOpen]);
 
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-
-    if (player1.info.isPlayerPlayingNow === false) {
-      return;
-    } else {
-      webSocket.emit('set-isUserAddWord', {
-        idx,
-        isUserAddWord,
-      });
-    }
+    webSocket.emit('set-isUserAddWord', {
+      idx,
+      isUserAddWord,
+      isPlaying: player1.info.isPlayerPlayingNow,
+    });
   }, [isUserAddWord]);
 
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-isItemOpen', data => {
-        if (data.idx === idx) {
-          setOpenItem(data.isItemOpen);
-        }
-      });
-    }
+
+    webSocket.on('get-isItemOpen', data => {
+      if (data.idx === idx) {
+        setOpenItem(data.isItemOpen);
+      }
+    });
   }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
     }
-    if (player1.info.isPlayerPlayingNow === true) {
-      return;
-    } else {
-      webSocket.on('get-isUserAddWord', data => {
-        if (data.idx === idx) {
-          setUserAddWord(data.isUserAddWord);
-        }
-      });
-    }
+
+    webSocket.on('get-isUserAddWord', data => {
+      if (data.idx === idx) {
+        setUserAddWord(data.isUserAddWord);
+      }
+    });
   }, [webSocket]);
 
   return (
