@@ -1,0 +1,81 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: black;
+  cursor: pointer;
+  font-size: 14px;
+
+  border: 1px solid green;
+  border-radius: 4px;
+
+  padding: 10px 20px;
+  margin-bottom: 20px;
+
+  width: calc(60px + 10%);
+
+  transition: background-color 250ms linear, border-color 250ms linear;
+}
+
+.label.active {
+  background-color: green;
+}
+.label:hover {
+  background-color: green;
+}
+
+.inputContainer {
+  width: 300px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.input {
+  display: none;
+}
+
+.passInput {
+  border: 1px solid gray;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 5px 5px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  width: 250px;
+
+  /* margin-bottom: 20px; */
+}
+
+.passLabel {
+  margin-bottom: 10px;
+}
+
+.btnCreate {
+  color: white;
+  background-color: black;
+  cursor: pointer;
+
+  border: 1px solid rgb(7, 164, 231);
+  border-radius: 4px;
+
+  padding: 10px 20px;
+  margin-top: 20px;
+
+  transition: background-color 250ms linear, border-color 250ms linear;
+}
+
+.btnCreate.creation {
+  margin-top: 0px;
+}
+
+.btnCreate.disabled {
+  background-color: gray;
+  border: 1px solid gray;
+}
+
+.btnCreate.notDisabled {
+  background-color: green;
+  border: 1px solid green;
+}

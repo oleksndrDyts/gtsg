@@ -23,6 +23,8 @@ const PlayingProcess = ({
       newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
       return newState;
     });
+
+    // console.log(player2);
   };
 
   const [currentScore, setCurrentScore] = useState(6);
@@ -42,16 +44,94 @@ const PlayingProcess = ({
   };
 
   const nextRound = () => {
-    setGameProcess('playingNow');
     changePlayingPlayer();
+    setGameProcess('playingNow');
+
     setCurrentScore(6);
+
+    if (webSocket === null) {
+      return;
+    }
+    // console.log('next');
+    // console.log(player2.info.isPlayerPlayingNow);
+    webSocket.emit('set-changePlayer', {
+      data: 'll',
+    });
+
+    // setIsPlayerPlaying(prevState => {
+    //   // console.log(prevState);
+    //   return !prevState;
+    // });
   };
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    webSocket.emit('set-changeScore', {
+      currentScore,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentScore]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    webSocket.on('get-changeScore', data => {
+      setCurrentScore(data.currentScore);
+      // decreaseScore();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    webSocket.on('get-changePlayer', data => {
+      console.log(data);
+      changePlayingPlayer();
+      player1.setInfo(prevState => {
+        const newState = { ...prevState };
+        newState.isPlayerPlayingNow = true;
+        return newState;
+      });
+      player2.setInfo(prevState => {
+        const newState = { ...prevState };
+        newState.isPlayerPlayingNow = false;
+        return newState;
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [webSocket]);
 
   useEffect(() => {
     if (currentScore === 0) {
       setGameProcess('endRoundNull');
     }
   }, [currentScore]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    webSocket.emit('set-gameProcess', {
+      gameProcess,
+    });
+  }, [gameProcess, player1.info.isPlayerPlayingNow, webSocket]);
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    webSocket.on('get-gameProcess', data => {
+      setGameProcess(data.gameProcess);
+    });
+  }, [player1.info.isPlayerPlayingNow, webSocket]);
 
   switch (gameProcess) {
     case 'playingNow':
@@ -62,7 +142,7 @@ const PlayingProcess = ({
           score={currentScore}
           setPlayerScore={setPlayerScore}
           setGameProcess={setGameProcess}
-          changePlayingPlayer={changePlayingPlayer}
+          // changePlayingPlayer={changePlayingPlayer}
           typeOfConnection={typeOfConnection}
           webSocket={webSocket}
           player1={player1}
@@ -79,6 +159,8 @@ const PlayingProcess = ({
           info={gameProcess}
           nextRound={nextRound}
           score={currentScore}
+          isMulti={webSocket === null ? false : true}
+          isYourTurn={player1.info.isPlayerPlayingNow}
           // stop={stop}
         />
       );

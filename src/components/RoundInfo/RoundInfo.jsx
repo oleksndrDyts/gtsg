@@ -21,7 +21,7 @@ const Text = ({ nextRound, children, song }) => {
   );
 };
 
-const RoundInfo = ({ info, nextRound, score, song }) => {
+const RoundInfo = ({ info, nextRound, score, song, isMulti, isYourTurn }) => {
   //   const isFirstRender = useRef(true);
   //   useEffect(() => {
   //     if (isFirstRender.current) {
@@ -37,20 +37,44 @@ const RoundInfo = ({ info, nextRound, score, song }) => {
     case 'endRoundWon':
       return (
         <Text nextRound={nextRound} song={song}>
-          <p>Вітаємо, ви виграли раунд!</p>
-          <p>Зароблені бали: {score}</p>
+          <p>
+            {!isMulti
+              ? 'Вітаємо, ви виграли раунд!'
+              : !isYourTurn
+              ? 'Противник виграв :('
+              : 'Вітаємо, ви виграли раунд!'}
+          </p>
+          <p>
+            {!isMulti
+              ? `Зароблені бали: ${score}`
+              : !isYourTurn
+              ? `Заробив: ${score}`
+              : `Зароблені бали: ${score}`}
+          </p>
         </Text>
       );
     case 'endRoundLost':
       return (
         <Text nextRound={nextRound} song={song}>
-          На жаль, ви програли раунд
+          <p>
+            {!isMulti
+              ? 'На жаль, ви програли раунд'
+              : !isYourTurn
+              ? 'Противник прорав !!!'
+              : 'На жаль, ви програли раунд'}
+          </p>
         </Text>
       );
     case 'endRoundNull':
       return (
         <Text nextRound={nextRound} song={song}>
-          Ви відкрили всі слова, вітаємо з нулем!
+          <p>
+            {!isMulti
+              ? 'Ви відкрили всі слова, вітаємо з нулем!'
+              : !isYourTurn
+              ? 'Противник відкрив всі слова, привітайте його з нулем'
+              : 'Ви відкрили всі слова, вітаємо з нулем!'}
+          </p>
         </Text>
       );
 

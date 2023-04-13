@@ -24,6 +24,32 @@ const GamePage = ({ players, webSocket, typeOfConnection }) => {
     isPlayerPlayingNow: false,
   });
   const { song } = useSong(songs, player1.isPlayerPlayingNow);
+  // console.log(player1.isPlayerPlayingNow);
+  // useEffect(() => {
+  //   if (webSocket === null) {
+  //     return;
+  //   }
+
+  //   webSocket.on('get-changePlayer', data => {
+  //     // console.log(player1.isPlayerPlayingNow);
+  //     // player1.setInfo(prevState => {
+  //     //   const newState = { ...prevState };
+  //     //   newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
+  //     //   return newState;
+  //     // });
+  //     // player2.setInfo(prevState => {
+  //     //   console.log(prevState);
+  //     //   const newState = { ...prevState };
+  //     //   newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
+  //     //   return newState;
+  //     // });
+  //     // changePlayingPlayer();
+  //     // console.log(player1.info);
+  //   });
+  // }, [webSocket]);
+
+  // console.log(player1);
+  // console.log(player2);
 
   useEffect(() => {
     if (player1.name === '' && player2.name === '') {
@@ -90,6 +116,7 @@ const GamePage = ({ players, webSocket, typeOfConnection }) => {
         player2={{ info: player2, setInfo: setPlayer2 }}
         typeOfConnection={typeOfConnection}
         webSocket={webSocket}
+
         // play={play}
         // stop={stop}
       />

@@ -40,7 +40,8 @@ const GameField = ({
   const shouldCompare =
     playerSongText.length !== 6 ||
     playerSongText.includes(null) ||
-    playerSongText.includes(undefined);
+    playerSongText.includes(undefined) ||
+    playerSongText.includes('');
 
   const handleSetSongText = (idx, text) => {
     setPlayerSongText(prevState => {
@@ -87,7 +88,7 @@ const GameField = ({
         playerSongText,
       });
     }
-  }, [playerSongText, player1.isPlayerPlayingNow, typeOfConnection]);
+  }, [playerSongText, typeOfConnection]);
 
   useEffect(() => {
     if (webSocket === null) {
@@ -101,7 +102,7 @@ const GameField = ({
         comparedResult,
       });
     }
-  }, [comparedResult, player1.isPlayerPlayingNow, typeOfConnection]);
+  }, [comparedResult, typeOfConnection]);
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -115,7 +116,7 @@ const GameField = ({
         typeOfConnection,
       });
     }
-  }, [isPlayerWon, player1.isPlayerPlayingNow, typeOfConnection]);
+  }, [isPlayerWon, typeOfConnection]);
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -129,7 +130,7 @@ const GameField = ({
         typeOfConnection,
       });
     }
-  }, [isResultCompared, player1.isPlayerPlayingNow]);
+  }, [isResultCompared]);
 
   useEffect(() => {
     if (webSocket === null) {
@@ -142,7 +143,7 @@ const GameField = ({
         setPlayerSongText(data);
       });
     }
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -154,7 +155,7 @@ const GameField = ({
         setComparedResult(data);
       });
     }
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -166,7 +167,7 @@ const GameField = ({
         setPlayerWon(data);
       });
     }
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -178,7 +179,7 @@ const GameField = ({
         setResultCompared(data);
       });
     }
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  }, [webSocket]);
   return (
     <>
       <div className={css.container}>

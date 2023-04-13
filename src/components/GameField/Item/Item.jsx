@@ -14,12 +14,14 @@ const Item = ({
 }) => {
   const [isItemOpen, setOpenItem] = useState(false);
   const [isUserAddWord, setUserAddWord] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
 
   const handleSetItemOpen = () => {
     if (isUserAddWord) {
       return;
     }
+
     setOpenItem(true);
     setText(idx, songText);
     decreaseScore();
@@ -56,6 +58,40 @@ const Item = ({
   const itemText = isItemOpen ? songText : 'Відкрити слово';
 
   useEffect(() => {
+    setText(idx, inputValue);
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+
+    if (player1.info.isPlayerPlayingNow === false) {
+      return;
+    } else {
+      webSocket.emit('set-itemText', {
+        inputValue,
+        idx,
+      });
+    }
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (webSocket === null) {
+      return;
+    }
+    if (player1.info.isPlayerPlayingNow === true) {
+      return;
+    } else {
+      webSocket.on('get-itemText', data => {
+        if (idx === data.idx) {
+          setInputValue(data.inputValue);
+        }
+      });
+    }
+  }, [webSocket]);
+
+  useEffect(() => {
     if (webSocket === null) {
       return;
     }
@@ -68,7 +104,8 @@ const Item = ({
         isItemOpen,
       });
     }
-  }, [isItemOpen, player1.isPlayerPlayingNow]);
+  }, [isItemOpen]);
+
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -77,13 +114,12 @@ const Item = ({
     if (player1.info.isPlayerPlayingNow === false) {
       return;
     } else {
-      console.log('send');
       webSocket.emit('set-isUserAddWord', {
         idx,
         isUserAddWord,
       });
     }
-  }, [isUserAddWord, player1.isPlayerPlayingNow]);
+  }, [isUserAddWord]);
 
   useEffect(() => {
     if (webSocket === null) {
@@ -94,11 +130,11 @@ const Item = ({
     } else {
       webSocket.on('get-isItemOpen', data => {
         if (data.idx === idx) {
-          setOpenItem(true);
+          setOpenItem(data.isItemOpen);
         }
       });
     }
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  }, [webSocket]);
   useEffect(() => {
     if (webSocket === null) {
       return;
@@ -112,7 +148,7 @@ const Item = ({
         }
       });
     }
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
+  }, [webSocket]);
 
   return (
     <div
@@ -139,8 +175,9 @@ const Item = ({
           >
             {isRightResult === 'notCompared' && <span>?</span>}
             <input
+              value={inputValue}
               onChange={e => {
-                setText(idx, e.target.value);
+                setInputValue(e.target.value);
               }}
               className={`${css.input} ${rightAnswearClass()}`}
               type="text"
