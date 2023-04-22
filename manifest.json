@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "GTSG",
+  "name": "GTSG",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "favicon.ico",
