@@ -1,7 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
+  margin-top: 90px;
+  width: 300px;
+  text-align: center;
 }
 
 .btn {

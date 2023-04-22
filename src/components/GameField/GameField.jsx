@@ -1,19 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { useGameField } from 'hooks/useGameField';
 
 import Item from './Item';
 import css from './GameField.module.css';
-
-const wonOrNo = items => {
-  for (const item of items) {
-    if (item !== true) {
-      return false;
-    }
-  }
-  // setPlayerScore();
-  return true;
-  // setPlayerScore();
-};
 
 const GameField = ({
   song,
@@ -25,130 +13,27 @@ const GameField = ({
   webSocket,
   player1,
 }) => {
-  const [playerSongText, setPlayerSongText] = useState([]);
-  const [comparedResult, setComparedResult] = useState([
-    'notCompared',
-    'notCompared',
-    'notCompared',
-    'notCompared',
-    'notCompared',
-    'notCompared',
-  ]);
-  const [isPlayerWon, setPlayerWon] = useState(false);
-  const [isResultCompared, setResultCompared] = useState(false);
-
-  const shouldCompare =
-    playerSongText.length !== 6 ||
-    playerSongText.includes(null) ||
-    playerSongText.includes(undefined) ||
-    playerSongText.includes('');
-
-  const handleSetSongText = (idx, text) => {
-    setPlayerSongText(prevState => {
-      const newState = [...prevState];
-      newState[idx] = text;
-      return newState;
-    });
-  };
-
-  const compareResult = () => {
-    if (shouldCompare) {
-      return;
-    }
-
-    const result = song.text.map((el, idx) => {
-      return el.toLowerCase() === playerSongText[idx].toLowerCase();
-    });
-    setComparedResult(result);
-    setResultCompared(true);
-  };
-
-  const goNextGameStage = () => {
-    setGameProcess(`endRound${isPlayerWon ? 'Won' : 'Lost'}`);
-  };
-
-  useEffect(() => {
-    if (wonOrNo(comparedResult)) {
-      setPlayerWon(true);
-      setPlayerScore();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comparedResult]);
-
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.emit('set-playerSongText', {
-      playerSongText,
-      isPlaying: player1.info.isPlayerPlayingNow,
-    });
-  }, [playerSongText, typeOfConnection]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.emit('set-comparedResult', {
-      comparedResult,
-      isPlaying: player1.info.isPlayerPlayingNow,
-    });
-  }, [comparedResult, typeOfConnection]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-
-    webSocket.emit('set-isPlayerWon', {
-      isPlayerWon,
-      isPlaying: player1.info.isPlayerPlayingNow,
-    });
-  }, [isPlayerWon, typeOfConnection]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-
-    webSocket.emit('set-isResultCompared', {
-      isResultCompared,
-      isPlaying: player1.info.isPlayerPlayingNow,
-    });
-  }, [isResultCompared]);
-
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.on('get-playerSongText', data => {
-      setPlayerSongText(data);
-    });
-  }, [webSocket]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.on('get-comparedResult', data => {
-      setComparedResult(data);
-    });
-  }, [webSocket]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.on('get-isPlayerWon', data => {
-      setPlayerWon(data);
-    });
-  }, [webSocket]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.on('get-isResultCompared', data => {
-      setResultCompared(data);
-    });
-  }, [webSocket]);
+  const {
+    handleSetSongText,
+    comparedResult,
+    isPlayerWon,
+    isResultCompared,
+    compareResult,
+    shouldCompare,
+    goNextGameStage,
+  } = useGameField(
+    song,
+    setGameProcess,
+    webSocket,
+    player1,
+    typeOfConnection,
+    setPlayerScore
+  );
   return (
     <>
+      {webSocket !== null && !player1.info.isPlayerPlayingNow && (
+        <p className={css.text}>Грає противник</p>
+      )}
       <div className={css.container}>
         {song.text.map((text, idx) => (
           <Item
@@ -168,7 +53,9 @@ const GameField = ({
         <p style={{ marginTop: '20px' }}>Отримано балів: {score}</p>
       )}
 
-      {!isResultCompared ? (
+      {webSocket !== null && !player1.info.isPlayerPlayingNow ? (
+        <></>
+      ) : !isResultCompared ? (
         <button
           className={css.btn}
           onClick={() => {

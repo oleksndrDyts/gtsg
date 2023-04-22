@@ -85,13 +85,14 @@
 
 .input {
   border: 1px solid gray;
+  /* border: none; */
   border-radius: 4px;
   font-size: 16px;
   padding: 5px 5px;
   background-color: black;
   color: white;
   text-align: center;
-  width: 80%;
+  width: 100%;
 }
 
 .input.rightAnswear,

@@ -11,7 +11,7 @@ import { useSong } from 'hooks/useSong';
 import { songs } from 'songs';
 
 const GamePage = ({ players, webSocket, typeOfConnection }) => {
-  const [songFrom, setSongFrom] = useState({ artist: '', text: [], track: '' });
+  // const [songFrom, setSongFrom] = useState({ artist: '', text: [], track: '' });
   const navigate = useNavigate();
   const [player1, setPlayer1] = useState({
     name: players.firstPlayer,
@@ -23,7 +23,12 @@ const GamePage = ({ players, webSocket, typeOfConnection }) => {
     score: 0,
     isPlayerPlayingNow: typeOfConnection === 'create' ? true : false,
   });
-  const { song } = useSong(songs, player1.isPlayerPlayingNow);
+  const { song } = useSong(
+    songs,
+    player1.isPlayerPlayingNow,
+    typeOfConnection,
+    webSocket
+  );
 
   useEffect(() => {
     if (player1.name === '' && player2.name === '') {
@@ -50,42 +55,13 @@ const GamePage = ({ players, webSocket, typeOfConnection }) => {
     });
   }, [typeOfConnection, webSocket]);
 
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-
-    if (typeOfConnection === 'connect') {
-      return;
-    } else {
-      webSocket.emit('set-song', {
-        song,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [song]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-
-    if (typeOfConnection === 'create') {
-      return;
-    } else {
-      webSocket.on('get-song', data => {
-        setSongFrom(data);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <PageContainer
       block={typeOfConnection !== null && player1.isPlayerPlayingNow === false}
     >
-      <PlayerInfo players={[player1, player2]} />
+      <PlayerInfo players={[player1, player2]} multi={webSocket} />
       <PlayingProcess
-        song={typeOfConnection === 'connect' ? songFrom : song}
+        song={song}
         player1={{ info: player1, setInfo: setPlayer1 }}
         player2={{ info: player2, setInfo: setPlayer2 }}
         typeOfConnection={typeOfConnection}

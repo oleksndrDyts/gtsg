@@ -1,6 +1,6 @@
 import css from './PlayerInfo.module.css';
 
-const PlayerInfo = ({ players }) => {
+const PlayerInfo = ({ players, multi }) => {
   return (
     <div className={css.container}>
       {players.map((player, idx) => {
@@ -9,6 +9,7 @@ const PlayerInfo = ({ players }) => {
           : `${css.item} ${css.notActive}`;
         return (
           <div className={classNames} key={idx}>
+            {multi && <p>{idx === 0 ? 'Ви' : 'Противник'}</p>}
             <p>
               Гравець <span className={css.player}>{player.name}</span>
             </p>

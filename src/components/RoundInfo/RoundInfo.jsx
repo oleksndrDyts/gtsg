@@ -8,6 +8,13 @@ const Text = ({ nextRound, children, song }) => {
       {children}
       <p>{song.artist}</p>
       <p>{song.track}</p>
+      <p>Слова пісні:</p>
+      <div>
+        {song.text.map((el, idx) => (
+          <span key={idx}>{el} </span>
+        ))}
+      </div>
+
       <button
         className={css.btn}
         type="button"
@@ -32,6 +39,7 @@ const RoundInfo = ({ info, nextRound, score, song, isMulti, isYourTurn }) => {
   //       stop();
   //     };
   //   });
+  console.log(song);
 
   switch (info) {
     case 'endRoundWon':

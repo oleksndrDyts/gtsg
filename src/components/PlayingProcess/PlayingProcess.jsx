@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 
 import GameField from 'components/GameField';
 import RoundInfo from 'components/RoundInfo';
+import EndGame from 'components/EndGame';
+
+import usePlayingProcess from 'hooks/multiplayer/usePlayingProcess';
+
+import SwitchComponent from 'components/SwitchComponent';
 
 const PlayingProcess = ({
   song,
@@ -23,11 +28,20 @@ const PlayingProcess = ({
       newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
       return newState;
     });
-
-    // console.log(player2);
   };
 
   const [currentScore, setCurrentScore] = useState(6);
+
+  const { changePlayerIo } = usePlayingProcess(
+    webSocket,
+    currentScore,
+    player1,
+    setCurrentScore,
+    changePlayingPlayer,
+    player2,
+    gameProcess,
+    setGameProcess
+  );
 
   const decreaseScore = () => {
     setCurrentScore(prevState => prevState - 1);
@@ -49,57 +63,8 @@ const PlayingProcess = ({
 
     setCurrentScore(6);
 
-    if (webSocket === null) {
-      return;
-    }
-
-    webSocket.emit('set-changePlayer', {
-      isPlaying: player1.info.isPlayerPlayingNow,
-    });
+    changePlayerIo();
   };
-
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-    webSocket.emit('set-changeScore', {
-      currentScore,
-      player: player1.info.isPlayerPlayingNow,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentScore]);
-
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-
-    webSocket.on('get-changeScore', data => {
-      setCurrentScore(data.currentScore);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
-    }
-
-    webSocket.on('get-changePlayer', data => {
-      changePlayingPlayer();
-      player1.setInfo(prevState => {
-        const newState = { ...prevState };
-        newState.isPlayerPlayingNow = true;
-        return newState;
-      });
-      player2.setInfo(prevState => {
-        const newState = { ...prevState };
-        newState.isPlayerPlayingNow = false;
-        return newState;
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (currentScore === 0) {
@@ -108,60 +73,61 @@ const PlayingProcess = ({
   }, [currentScore]);
 
   useEffect(() => {
-    if (webSocket === null) {
-      return;
+    if (player1.info.score > 9) {
+      setGameProcess('endGame');
     }
-
-    webSocket.emit('set-gameProcess', {
-      gameProcess,
-      isPlaying: player1.info.isPlayerPlayingNow,
-    });
-  }, [gameProcess, player1.info.isPlayerPlayingNow, webSocket]);
-  useEffect(() => {
-    if (webSocket === null) {
-      return;
+    if (player2.info.score > 9) {
+      setGameProcess('endGame');
     }
+  }, [player1.info.score, player2.info.score]);
 
-    webSocket.on('get-gameProcess', data => {
-      setGameProcess(data.gameProcess);
-    });
-  }, [player1.info.isPlayerPlayingNow, webSocket]);
-
-  switch (gameProcess) {
-    case 'playingNow':
-      return (
-        <GameField
-          song={song}
-          decreaseScore={decreaseScore}
-          score={currentScore}
-          setPlayerScore={setPlayerScore}
-          setGameProcess={setGameProcess}
-          // changePlayingPlayer={changePlayingPlayer}
-          typeOfConnection={typeOfConnection}
-          webSocket={webSocket}
-          player1={player1}
-          // play={play}
-        />
-      );
-
-    case 'endRoundWon':
-    case 'endRoundLost':
-    case 'endRoundNull':
-      return (
-        <RoundInfo
-          song={song}
-          info={gameProcess}
-          nextRound={nextRound}
-          score={currentScore}
-          isMulti={webSocket === null ? false : true}
-          isYourTurn={player1.info.isPlayerPlayingNow}
-          // stop={stop}
-        />
-      );
-
-    default:
-      break;
-  }
+  return (
+    <SwitchComponent
+      caseTo={gameProcess}
+      arrayOfItems={[
+        {
+          caseTo: 'playingNow',
+          childs: [
+            <GameField
+              key={1}
+              song={song}
+              decreaseScore={decreaseScore}
+              score={currentScore}
+              setPlayerScore={setPlayerScore}
+              setGameProcess={setGameProcess}
+              typeOfConnection={typeOfConnection}
+              webSocket={webSocket}
+              player1={player1}
+            />,
+          ],
+        },
+        {
+          caseTo: ['endRoundWon', 'endRoundLost', 'endRoundNull'],
+          childs: [
+            <RoundInfo
+              key={2}
+              song={song}
+              info={gameProcess}
+              nextRound={nextRound}
+              score={currentScore}
+              isMulti={webSocket === null ? false : true}
+              isYourTurn={player1.info.isPlayerPlayingNow}
+            />,
+          ],
+        },
+        {
+          caseTo: 'endGame',
+          childs: [
+            <EndGame
+              player1={player1.info}
+              player2={player2.info}
+              webSocket={webSocket}
+            />,
+          ],
+        },
+      ]}
+    />
+  );
 };
 
 export default PlayingProcess;

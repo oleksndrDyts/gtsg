@@ -35,6 +35,7 @@ const Item = ({
   };
   const handleUserCancelAddWord = () => {
     setUserAddWord(false);
+    setInputValue('');
     setText(idx, undefined);
   };
 
@@ -55,7 +56,13 @@ const Item = ({
     ? `${css.anotherInnerContainer} ${css.notactive}`
     : `${css.anotherInnerContainer} ${css.active}`;
 
-  const itemText = isItemOpen ? songText : 'Відкрити слово';
+  const itemText = isItemOpen
+    ? songText
+    : webSocket === null
+    ? 'Відкрити слово'
+    : player1.info.isPlayerPlayingNow
+    ? 'Відкрити слово'
+    : '-';
 
   useEffect(() => {
     setText(idx, inputValue);
@@ -153,7 +160,7 @@ const Item = ({
               inputRef.current.focus();
             }}
           >
-            {isRightResult === 'notCompared' && <span>?</span>}
+            {/* {isRightResult === 'notCompared' && <span>?</span>} */}
             <input
               value={inputValue}
               onChange={e => {
@@ -164,7 +171,7 @@ const Item = ({
               autoFocus={true}
               ref={inputRef}
             ></input>
-            {isRightResult === 'notCompared' && <span>?</span>}
+            {/* {isRightResult === 'notCompared' && <span>?</span>} */}
           </div>
         </>
       ) : (
@@ -187,18 +194,23 @@ const Item = ({
 
       {isRightResult === 'notCompared' && (
         <>
-          {!isItemOpen && (
-            <div
-              onClick={
-                isUserAddWord ? handleUserCancelAddWord : handleUserAddWord
-              }
-              className={anotherInnerContainerClass}
-            >
-              <span>{isUserAddWord ? 'Скасувати' : 'Ввести'}</span>
-            </div>
+          {webSocket !== null && !player1.info.isPlayerPlayingNow ? (
+            <></>
+          ) : (
+            !isItemOpen && (
+              <div
+                onClick={
+                  isUserAddWord ? handleUserCancelAddWord : handleUserAddWord
+                }
+                className={anotherInnerContainerClass}
+              >
+                <span>{isUserAddWord ? 'Скасувати' : 'Ввести'}</span>
+              </div>
+            )
           )}
         </>
       )}
+      {/* {} */}
     </div>
   );
 };

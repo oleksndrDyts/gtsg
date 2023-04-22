@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from 'react';
-import { io } from 'socket.io-client';
+import { useRef, useState } from 'react';
+
+import useConnect from 'hooks/multiplayer/useConnect';
 
 import css from './MultiGame.module.css';
-
-import { useNavigate } from 'react-router-dom';
 
 const MultiGame = ({
   multiInfo,
@@ -12,79 +11,34 @@ const MultiGame = ({
   typeOfConnection,
   setTypeOfConnection,
   children,
+  gameType,
 }) => {
   const [password, setPassword] = useState('');
   const isFirstRender = useRef(true);
   const [passToJoin, setPassToJoin] = useState('none');
-  const navigate = useNavigate();
-
-  const connect = () => {
-    // console.log(socket);
-    if (typeOfConnection === 'create') {
-      multiInfo.webSocket.emit('create', {
-        isFirstPlayer: typeOfConnection === 'create' ? true : false,
-
-        playerName: multiInfo.playerName,
-      });
-    } else {
-      multiInfo.webSocket.emit('join', {
-        playerName: multiInfo.playerName,
-        password,
-      });
-      multiInfo.webSocket.emit('get-data', {});
-    }
-    // console.log();
-  };
 
   const handleChange = e => {
     setTypeOfConnection(e.target.value);
   };
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      const newSocket = io.connect(
-        'https://gtsg-io-production.up.railway.app/'
-      );
-      // const newSocket = io.connect('http://localhost:5000');
-      multiInfo.setWebSocket(newSocket);
-    }
-    isFirstRender.current = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { connect } = useConnect({
+    multiInfo,
+    typeOfConnection,
+    setPlayers,
+    password,
+    setPassToJoin,
+    isFirstRender,
+  });
 
-  useEffect(() => {
-    if (multiInfo.webSocket === null) {
-      return;
-    }
-    multiInfo.webSocket.on('room-pass', password => {
-      setPassToJoin(password);
-    });
-  }, [multiInfo.webSocket]);
+  // useEffect(() => {
+  //   if (multiInfo.webSocket === null) {
+  //     return;
+  //   }
 
-  useEffect(() => {
-    if (multiInfo.webSocket === null) {
-      return;
-    }
-
-    multiInfo.webSocket.on('get-data', data => {
-      if (typeOfConnection === 'create') {
-        setPlayers.setSecondPlayerName(data.secondPlayerName);
-        return;
-      }
-
-      setPlayers.setSecondPlayerName(data.firstPlayerName);
-    });
-  }, [multiInfo.webSocket, typeOfConnection]);
-
-  useEffect(() => {
-    if (multiInfo.webSocket === null) {
-      return;
-    }
-
-    multiInfo.webSocket.on('start-game', data => {
-      navigate('/game');
-    });
-  }, [multiInfo.webSocket]);
+  //   return () => {
+  //     multiInfo.webSocket.disconnect();
+  //   };
+  // }, []);
 
   return (
     <>
@@ -94,7 +48,7 @@ const MultiGame = ({
             typeOfConnection === 'create' ? css.active : ''
           }`}
         >
-          Створеня
+          Створення
           <input
             className={css.input}
             type="radio"
@@ -128,6 +82,7 @@ const MultiGame = ({
           <input
             className={css.passInput}
             type="text"
+            autoComplete="off"
             value={password}
             id="pass"
             onChange={e => {
