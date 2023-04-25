@@ -12,10 +12,6 @@ const App = () => {
   const { players, setPlayers, shouldStart } = useSetPlayersNames();
   const [typeOfConnection, setTypeOfConnection] = useState(null);
 
-  // useEffect(() => {
-  //   setWebSocket(null);
-  // }, [gameType === 'inOneDevice']);
-
   return (
     <Routes>
       <Route

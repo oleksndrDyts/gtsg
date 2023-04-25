@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const usePlayingProcess = (
+const usePlayingProcessIo = (
   webSocket,
   currentScore,
   player1,
@@ -87,4 +87,4 @@ const usePlayingProcess = (
   return { changePlayerIo };
 };
 
-export default usePlayingProcess;
+export default usePlayingProcessIo;

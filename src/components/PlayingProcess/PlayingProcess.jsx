@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
-
 import GameField from 'components/GameField';
 import RoundInfo from 'components/RoundInfo';
 import EndGame from 'components/EndGame';
 
-import usePlayingProcess from 'hooks/multiplayer/usePlayingProcess';
+import { usePlayingProcess } from 'hooks/usePlayingProcess';
 
 import SwitchComponent from 'components/SwitchComponent';
 
@@ -15,71 +13,14 @@ const PlayingProcess = ({
   typeOfConnection,
   webSocket,
 }) => {
-  const [gameProcess, setGameProcess] = useState('playingNow');
-
-  const changePlayingPlayer = () => {
-    player1.setInfo(prevState => {
-      const newState = { ...prevState };
-      newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
-      return newState;
-    });
-    player2.setInfo(prevState => {
-      const newState = { ...prevState };
-      newState.isPlayerPlayingNow = !prevState.isPlayerPlayingNow;
-      return newState;
-    });
-  };
-
-  const [currentScore, setCurrentScore] = useState(6);
-
-  const { changePlayerIo } = usePlayingProcess(
-    webSocket,
-    currentScore,
-    player1,
-    setCurrentScore,
-    changePlayingPlayer,
-    player2,
+  const {
     gameProcess,
-    setGameProcess
-  );
-
-  const decreaseScore = () => {
-    setCurrentScore(prevState => prevState - 1);
-  };
-
-  const setPlayerScore = () => {
-    const player = player1.info.isPlayerPlayingNow ? player1 : player2;
-
-    player.setInfo(prevState => {
-      const newState = { ...prevState };
-      newState.score = prevState.score += currentScore;
-      return newState;
-    });
-  };
-
-  const nextRound = () => {
-    changePlayingPlayer();
-    setGameProcess('playingNow');
-
-    setCurrentScore(6);
-
-    changePlayerIo();
-  };
-
-  useEffect(() => {
-    if (currentScore === 0) {
-      setGameProcess('endRoundNull');
-    }
-  }, [currentScore]);
-
-  useEffect(() => {
-    if (player1.info.score > 9) {
-      setGameProcess('endGame');
-    }
-    if (player2.info.score > 9) {
-      setGameProcess('endGame');
-    }
-  }, [player1.info.score, player2.info.score]);
+    currentScore,
+    setPlayerScore,
+    decreaseScore,
+    setGameProcess,
+    nextRound,
+  } = usePlayingProcess(player1, player2, webSocket);
 
   return (
     <SwitchComponent
@@ -122,6 +63,7 @@ const PlayingProcess = ({
               player1={player1.info}
               player2={player2.info}
               webSocket={webSocket}
+              key={1}
             />,
           ],
         },

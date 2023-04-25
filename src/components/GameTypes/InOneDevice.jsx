@@ -9,7 +9,7 @@ const InOneDevice = ({
   setTypeOfConnection,
 }) => {
   useEffect(() => {
-    // multiInfo.setWebSocket(null);
+    multiInfo.setWebSocket(null);
     setTypeOfConnection(null);
   }, [multiInfo, setTypeOfConnection]);
 

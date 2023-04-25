@@ -160,7 +160,6 @@ const Item = ({
               inputRef.current.focus();
             }}
           >
-            {/* {isRightResult === 'notCompared' && <span>?</span>} */}
             <input
               value={inputValue}
               onChange={e => {
@@ -171,7 +170,6 @@ const Item = ({
               autoFocus={true}
               ref={inputRef}
             ></input>
-            {/* {isRightResult === 'notCompared' && <span>?</span>} */}
           </div>
         </>
       ) : (
@@ -183,7 +181,6 @@ const Item = ({
               return;
             }
           }}
-          // style={{ pointerEvents: isItemOpen ? 'none' : 'auto' }}
           className={`${css.innerContainer} ${
             isItemOpen ? css.opened : css.notopened
           }`}
@@ -210,7 +207,6 @@ const Item = ({
           )}
         </>
       )}
-      {/* {} */}
     </div>
   );
 };

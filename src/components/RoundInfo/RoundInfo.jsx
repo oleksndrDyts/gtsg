@@ -29,18 +29,6 @@ const Text = ({ nextRound, children, song }) => {
 };
 
 const RoundInfo = ({ info, nextRound, score, song, isMulti, isYourTurn }) => {
-  //   const isFirstRender = useRef(true);
-  //   useEffect(() => {
-  //     if (isFirstRender.current) {
-  //       isFirstRender.current = false;
-  //       return;
-  //     }
-  //     return () => {
-  //       stop();
-  //     };
-  //   });
-  console.log(song);
-
   switch (info) {
     case 'endRoundWon':
       return (

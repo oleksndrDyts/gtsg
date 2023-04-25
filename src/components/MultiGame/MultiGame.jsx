@@ -30,16 +30,6 @@ const MultiGame = ({
     isFirstRender,
   });
 
-  // useEffect(() => {
-  //   if (multiInfo.webSocket === null) {
-  //     return;
-  //   }
-
-  //   return () => {
-  //     multiInfo.webSocket.disconnect();
-  //   };
-  // }, []);
-
   return (
     <>
       <div className={css.inputContainer}>
